@@ -1,11 +1,19 @@
 #include <iostream>
 
 using namespace std;
+class Furniture{
+public:
+    virtual ~Furniture()=default;
+    virtual void description() =0;
+    virtual void sit() = 0;
+};
 
-class Chair{
+class Chair:public Furniture{
 public:
   virtual ~Chair()=default;
-  virtual void description() =0;
+  void sit(){
+        std::cout<<"Checking sitting on chair option\n";
+    }
 };
 
 class victorianChair : public Chair{
@@ -24,10 +32,12 @@ class artDecoChair : public Chair{
     }
 };
 
-class Sofa{
+class Sofa:public Furniture{
 public:
-  virtual ~Sofa()=default;
-  virtual void description() =0;
+    virtual ~Sofa()=default;
+    void sit(){
+          std::cout<<"Checking sitting on sofa option\n";
+      }
 };
 
 class victorianSofa : public Sofa{
@@ -49,40 +59,41 @@ class artDecoSofa : public Sofa{
 class AbstractFactory{
 public:
     virtual ~AbstractFactory()=default;
-    virtual Chair* productChair() = 0;
-    virtual Sofa* productSofa() = 0;
+    virtual Furniture* productChair() = 0;
+    virtual Furniture* productSofa() = 0;
 };
 
 class victorianFactory:public AbstractFactory{
-    Chair* productChair(){
+    Furniture* productChair(){
         return new victorianChair();
     }
-    Sofa* productSofa(){
+    Furniture* productSofa(){
         return new victorianSofa();
     }
 };
 class modernFactory:public AbstractFactory{
-    Chair* productChair(){
+    Furniture* productChair(){
         return new modernChair();
     }
-    Sofa* productSofa(){
+    Furniture* productSofa(){
         return new modernSofa();
     }
 };
 class artDecoFactory:public AbstractFactory{
-    Chair* productChair(){
+    Furniture* productChair(){
         return new artDecoChair();
     }
-    Sofa* productSofa(){
+    Furniture* productSofa(){
         return new artDecoSofa();
     }
 };
 int main()
 {
-    AbstractFactory* factory=new artDecoFactory();
-    Chair* chair=factory->productChair();
+    AbstractFactory* factory=new victorianFactory();
+    Furniture* chair=factory->productChair();
     chair->description();
-    Sofa* sofa=factory->productSofa();
+    chair->sit();
+    Furniture* sofa=factory->productSofa();
     delete factory;
     delete chair;
     delete sofa;
